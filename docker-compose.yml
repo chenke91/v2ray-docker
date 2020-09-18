@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+
+  v2ray:
+    image: v2fly/v2fly-core
+    networks:
+      - v2ray
+    volumes:
+      - ./data/v2ray-config:/etc/v2ray
+
+  nginx:
+    image: nginx:1.15-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - v2ray
+    volumes:
+      - ./data/nginx-config:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    depends_on:
+      - v2ray
+
+  certbot:
+    image: certbot/certbot
+    networks:
+      - v2ray
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+networks:
+  v2ray:
