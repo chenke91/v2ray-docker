@@ -1,4 +1,4 @@
-### 简介
+## 简介
 
 docker、docker-compose安装参考: 
 
@@ -12,9 +12,15 @@ docker镜像：
 - nginx:1.15-alpine
 - certbot/certbot
 
+## 部署
+
+### 下载代码
+
+> git clone https://github.com/chenke91/v2ray-docker.git
+
 ### 进入项目目录
 
-> cd /path/v2ray-docker
+> cd /<path>/v2ray-docker
 
 ### 启动初始化脚本
 
